@@ -78,7 +78,7 @@ export const Orders: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Total</p>
-                      <p className="font-bold">${order.total.toFixed(2)}</p>
+                      <p className="font-bold">₹{order.total.toFixed(2)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ export const Orders: React.FC = () => {
                         <p className="text-sm text-gray-600">
                           Size: {item.size} | Color: {item.color} | Qty: {item.quantity}
                         </p>
-                        <p className="font-medium">${item.product.price.toFixed(2)}</p>
+                        <p className="font-medium">₹{item.product.price.toFixed(2)}</p>
                       </div>
                     </div>
                   ))}

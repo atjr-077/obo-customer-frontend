@@ -91,10 +91,10 @@ export const Cart: React.FC = () => {
                   </div>
 
                   <div className="text-right">
-                    <p className="font-bold">${(item.product.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-bold">₹{(item.product.price * item.quantity).toFixed(2)}</p>
                     {item.product.originalPrice && (
                       <p className="text-sm text-gray-400 line-through">
-                        ${(item.product.originalPrice * item.quantity).toFixed(2)}
+                        ₹{(item.product.originalPrice * item.quantity).toFixed(2)}
                       </p>
                     )}
                   </div>
@@ -121,22 +121,22 @@ export const Cart: React.FC = () => {
             <div className="space-y-4 mb-6">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">${subtotal.toFixed(2)}</span>
+                <span className="font-medium">₹{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Shipping</span>
                 <span className="font-medium">
-                  {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}
                 </span>
               </div>
               {shipping > 0 && (
                 <p className="text-sm text-gray-600">
-                  Add ${(50 - subtotal).toFixed(2)} more for FREE shipping!
+                  Add ₹{(50 - subtotal).toFixed(2)} more for FREE shipping!
                 </p>
               )}
               <div className="border-t pt-4 flex justify-between text-lg font-bold">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>₹{total.toFixed(2)}</span>
               </div>
             </div>
 

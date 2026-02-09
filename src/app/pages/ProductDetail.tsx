@@ -152,17 +152,17 @@ export const ProductDetail: React.FC = () => {
             {product.originalPrice ? (
               <div className="flex items-center gap-3">
                 <span className="text-3xl font-bold text-red-600">
-                  ${product.price.toFixed(2)}
+                  ₹{product.price.toFixed(2)}
                 </span>
                 <span className="text-xl text-gray-400 line-through">
-                  ${product.originalPrice.toFixed(2)}
+                  ₹{product.originalPrice.toFixed(2)}
                 </span>
                 <span className="bg-red-600 text-white px-2 py-1 text-sm font-bold rounded">
                   SAVE {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
                 </span>
               </div>
             ) : (
-              <span className="text-3xl font-bold">${product.price.toFixed(2)}</span>
+              <span className="text-3xl font-bold">₹{product.price.toFixed(2)}</span>
             )}
           </div>
 
@@ -287,7 +287,7 @@ export const ProductDetail: React.FC = () => {
               <Truck size={24} />
               <div>
                 <p className="font-bold">FREE DELIVERY</p>
-                <p className="text-sm text-gray-600">On orders over $50 • Delivery in 3-5 days</p>
+                <p className="text-sm text-gray-600">On orders over ₹50 • Delivery in 3-5 days</p>
               </div>
             </div>
             <div className="flex gap-3">

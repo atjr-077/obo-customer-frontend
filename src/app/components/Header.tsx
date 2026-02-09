@@ -4,7 +4,7 @@ import { Search, ShoppingBag, Heart, User, Menu, X, Bell } from 'lucide-react';
 import { useShop } from '@/app/context/ShopContext';
 import { SignOutButton } from '@clerk/clerk-react';
 // FIXME: Uncomment this line when deploying to Figma/GitHub (see FIGMA_ASSETS_README.md)
- //import logoImage from 'figma:asset/355e85a53f8fd55bb85f4c9cfe98774e87cb561d.png';
+//import logoImage from 'figma:asset/355e85a53f8fd55bb85f4c9cfe98774e87cb561d.png';
 
 export const Header: React.FC = () => {
   const { getTotalItems, user, notifications } = useShop();
@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-50 bg-white border-b">
       {/* Top Banner */}
       <div className="bg-black text-white text-center py-2 px-4 text-sm">
-        <p>FREE SHIPPING ON ORDERS OVER $50 | UP TO 70% OFF SALE</p>
+        <p>FREE SHIPPING ON ORDERS OVER ₹50 | UP TO 70% OFF SALE</p>
       </div>
 
       {/* Main Header */}
@@ -43,7 +43,7 @@ export const Header: React.FC = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             {/* FIXME: Uncomment img tag when deploying to Figma/GitHub (see FIGMA_ASSETS_README.md) */}
-            { /*<img src={logoImage} alt="OBO HUB" className="h-10 md:h-12" />*/ }
+            { /*<img src={logoImage} alt="OBO HUB" className="h-10 md:h-12" />*/}
             <h1 className="text-2xl font-bold">OBO HUB</h1>
           </Link>
 
@@ -82,6 +82,15 @@ export const Header: React.FC = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
+            <button
+              onClick={() => {
+                console.log('Redirecting to Seller Dashboard');
+                window.open("https://obo-seller-frontend.vercel.app/", "_blank");
+              }}
+              className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 transition-colors whitespace-nowrap"
+            >
+              Be a Seller
+            </button>
             {user ? (
               <div className="relative group">
                 <button className="p-2 hover:bg-gray-100 rounded-full">
@@ -155,6 +164,12 @@ export const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="lg:hidden border-t bg-white">
           <nav className="container mx-auto px-4 py-4 space-y-4">
+            <button
+              onClick={() => window.open("https://obo-seller-frontend.vercel.app/", "_blank")}
+              className="w-full py-2 bg-green-600 text-white font-medium rounded hover:bg-green-700 transition-colors"
+            >
+              Be a Seller
+            </button>
             <Link
               to="/products?category=Women"
               className="block py-2"

@@ -26,9 +26,8 @@ export const Account: React.FC = () => {
         <div className="space-y-2">
           <button
             onClick={() => setActiveTab('profile')}
-            className={`w-full text-left px-4 py-3 rounded flex items-center gap-3 ${
-              activeTab === 'profile' ? 'bg-black text-white' : 'hover:bg-gray-100'
-            }`}
+            className={`w-full text-left px-4 py-3 rounded flex items-center gap-3 ${activeTab === 'profile' ? 'bg-black text-white' : 'hover:bg-gray-100'
+              }`}
           >
             <User size={20} />
             Profile
@@ -49,18 +48,16 @@ export const Account: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('addresses')}
-            className={`w-full text-left px-4 py-3 rounded flex items-center gap-3 ${
-              activeTab === 'addresses' ? 'bg-black text-white' : 'hover:bg-gray-100'
-            }`}
+            className={`w-full text-left px-4 py-3 rounded flex items-center gap-3 ${activeTab === 'addresses' ? 'bg-black text-white' : 'hover:bg-gray-100'
+              }`}
           >
             <MapPin size={20} />
             Addresses
           </button>
           <button
             onClick={() => setActiveTab('payment')}
-            className={`w-full text-left px-4 py-3 rounded flex items-center gap-3 ${
-              activeTab === 'payment' ? 'bg-black text-white' : 'hover:bg-gray-100'
-            }`}
+            className={`w-full text-left px-4 py-3 rounded flex items-center gap-3 ${activeTab === 'payment' ? 'bg-black text-white' : 'hover:bg-gray-100'
+              }`}
           >
             <CreditCard size={20} />
             Payment Methods
@@ -119,7 +116,7 @@ export const Account: React.FC = () => {
                     Add New Address
                   </button>
                 </div>
-                
+
                 {user.addresses.length === 0 ? (
                   <div className="text-center py-8">
                     <MapPin size={48} className="mx-auto mb-4 text-gray-400" />
@@ -171,7 +168,7 @@ export const Account: React.FC = () => {
                         </p>
                         <p className="text-gray-600">{address.country}</p>
                         <p className="text-gray-600 mt-2">Phone: {address.phone}</p>
-                        
+
                         {!address.isDefault && (
                           <button
                             onClick={() => setDefaultAddress(address.id)}

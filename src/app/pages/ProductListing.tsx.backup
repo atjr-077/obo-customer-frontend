@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import { ProductCard } from '@/app/components/ProductCard';
-import { categories } from '@/app/data/products';
-import { api, Product } from '@/config/api';
+import { mockProducts, categories } from '@/app/data/products';
 
 export const ProductListing: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -11,52 +10,29 @@ export const ProductListing: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [sortBy, setSortBy] = useState('featured');
-  
-  // API state
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const categoryParam = searchParams.get('category');
   const saleParam = searchParams.get('sale');
   const searchQuery = searchParams.get('search');
 
-  // Fetch products from API
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await api.getProducts(categoryParam || undefined);
-        setProducts(response.data.products);
-      } catch (err) {
-        console.error('Error fetching products:', err);
-        setError('Failed to load products. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [categoryParam]);
-
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...products];
+    let filtered = [...mockProducts];
 
-    // Filter by sale
-    if (saleParam) {
-      filtered = filtered.filter(p => p.discount > 0);
+    // Filter by URL params
+    if (categoryParam) {
+      filtered = filtered.filter(p => p.category === categoryParam);
     }
-
-    // Filter by search query
+    if (saleParam) {
+      filtered = filtered.filter(p => p.originalPrice);
+    }
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query) ||
-        p.tags.some(tag => tag.toLowerCase().includes(query))
+        p.brand.toLowerCase().includes(query)
       );
     }
 
@@ -93,17 +69,17 @@ export const ProductListing: React.FC = () => {
         filtered.sort((a, b) => b.price - a.price);
         break;
       case 'newest':
-        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        // Already in order
         break;
       case 'popular':
-        filtered.sort((a, b) => b.reviewCount - a.reviewCount);
+        filtered.sort((a, b) => b.reviews - a.reviews);
         break;
       default:
         break;
     }
 
     return filtered;
-  }, [products, saleParam, searchQuery, selectedCategories, selectedSizes, selectedColors, priceRange, sortBy]);
+  }, [categoryParam, saleParam, searchQuery, selectedCategories, selectedSizes, selectedColors, priceRange, sortBy]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev =>
@@ -129,37 +105,8 @@ export const ProductListing: React.FC = () => {
     );
   };
 
-  const allSizes = Array.from(new Set(products.flatMap(p => p.sizes)));
-  const allColors = Array.from(new Set(products.flatMap(p => p.colors)));
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-16">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading products...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center py-16">
-          <p className="text-xl text-red-600">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-4 px-6 py-2 bg-black text-white rounded-lg"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const allSizes = Array.from(new Set(mockProducts.flatMap(p => p.sizes)));
+  const allColors = Array.from(new Set(mockProducts.flatMap(p => p.colors)));
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -223,52 +170,48 @@ export const ProductListing: React.FC = () => {
             </div>
 
             {/* Sizes */}
-            {allSizes.length > 0 && (
-              <div>
-                <button className="flex justify-between items-center w-full font-bold mb-4">
-                  <span>SIZE</span>
-                  <ChevronDown size={20} />
-                </button>
-                <div className="grid grid-cols-4 gap-2">
-                  {allSizes.slice(0, 12).map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => toggleSize(size)}
-                      className={`border rounded px-2 py-1 text-sm ${
-                        selectedSizes.includes(size)
-                          ? 'bg-black text-white'
-                          : 'hover:border-black'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
+            <div>
+              <button className="flex justify-between items-center w-full font-bold mb-4">
+                <span>SIZE</span>
+                <ChevronDown size={20} />
+              </button>
+              <div className="grid grid-cols-4 gap-2">
+                {allSizes.slice(0, 12).map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => toggleSize(size)}
+                    className={`border rounded px-2 py-1 text-sm ${
+                      selectedSizes.includes(size)
+                        ? 'bg-black text-white'
+                        : 'hover:border-black'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             {/* Colors */}
-            {allColors.length > 0 && (
-              <div>
-                <button className="flex justify-between items-center w-full font-bold mb-4">
-                  <span>COLOR</span>
-                  <ChevronDown size={20} />
-                </button>
-                <div className="space-y-2">
-                  {allColors.slice(0, 10).map((color) => (
-                    <label key={color} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedColors.includes(color)}
-                        onChange={() => toggleColor(color)}
-                        className="w-4 h-4"
-                      />
-                      <span>{color}</span>
-                    </label>
-                  ))}
-                </div>
+            <div>
+              <button className="flex justify-between items-center w-full font-bold mb-4">
+                <span>COLOR</span>
+                <ChevronDown size={20} />
+              </button>
+              <div className="space-y-2">
+                {allColors.slice(0, 10).map((color) => (
+                  <label key={color} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedColors.includes(color)}
+                      onChange={() => toggleColor(color)}
+                      className="w-4 h-4"
+                    />
+                    <span>{color}</span>
+                  </label>
+                ))}
               </div>
-            )}
+            </div>
 
             {/* Price Range */}
             <div>
@@ -280,14 +223,14 @@ export const ProductListing: React.FC = () => {
                 <input
                   type="range"
                   min="0"
-                  max="10000"
+                  max="500"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm">
-                  <span>₹{priceRange[0]}</span>
-                  <span>₹{priceRange[1]}</span>
+                  <span>${priceRange[0]}</span>
+                  <span>${priceRange[1]}</span>
                 </div>
               </div>
             </div>
