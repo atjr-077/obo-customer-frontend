@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+# obo-customer-frontend
+
+=======
 
   # ASOS-like Frontend UI
 
@@ -9,3 +13,4 @@
 
   Run `npm run dev` to start the development server.
   
+>>>>>>> a0036254caae5c66b95e61e6180677a396866f28
